@@ -1,8 +1,9 @@
 #define GLFW_INCLUDE_NONE
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include <iostream>
+#include <shaders.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -38,6 +39,8 @@ int main() {
     process_input(window);
 
     // render
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     // swap buffers and call events
     glfwSwapBuffers(window);
