@@ -27,7 +27,7 @@ public:
       std::stringstream v_shader_stream, f_shader_stream;
 
       v_shader_stream << v_shader_file.rdbuf();
-      f_shader_stream << v_shader_file.rdbuf();
+      f_shader_stream << f_shader_file.rdbuf();
 
       v_shader_file.close();
       f_shader_file.close();
