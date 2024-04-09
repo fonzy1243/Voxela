@@ -4,6 +4,12 @@ out vec4 ScreenColor;
 uniform int screen_width;
 uniform int screen_height;
 
+uniform vec3 camera_pos;
+uniform vec3 camera_dir;
+uniform vec3 camera_up;
+
+vec3 light_source = vec3(-2.0, 5.0, -4.0);
+
 float sphere_sdf(vec3 p, float r) {
     return length(p) - r;
 }
@@ -14,11 +20,11 @@ float box_sdf(vec3 p, vec3 b) {
 }
 
 float scene_sdf(vec3 p) {
-    return box_sdf(p, vec3(0.5, 0.5, 0.5));
+    return box_sdf(p, vec3(1.5));
 }
 
 vec3 get_normals(vec3 p) {
-    float EPSILON = 0.001;
+    float EPSILON = 0.0001;
     return normalize(vec3(
             scene_sdf(vec3(p.x + EPSILON, p.yz)) - scene_sdf(vec3(p.x - EPSILON, p.yz)),
             scene_sdf(vec3(p.x, p.y + EPSILON, p.z)) - scene_sdf(vec3(p.x, p.y - EPSILON, p.z)),
@@ -40,9 +46,7 @@ float soft_shadow(vec3 p, vec3 rd, float mint, float maxt, float w) {
 }
 
 vec3 ray_march(vec3 pos, vec3 ray_dir) {
-    const int MAX_STEP = 64;
-
-    vec3 light_source = vec3(-1.0, 5.0, 2.0);
+    const int MAX_STEP = 256;
 
     int step = 0;
     float d = scene_sdf(pos);
@@ -54,30 +58,42 @@ vec3 ray_march(vec3 pos, vec3 ray_dir) {
     }
 
     if (step < MAX_STEP) {
-        vec3 normal = get_normals(pos);
+        vec3 norm = get_normals(pos);
         vec3 light_dir = normalize(light_source - pos);
-        float diff = max(dot(normal, light_dir), 0.0);
-        float shadow = soft_shadow(pos, light_dir, 0.1, 3.0, 16.0);
-        return vec3(0.65, 0.1, 0.2) * diff * shadow;
+
+        float diff = max(dot(norm, light_dir), 0.0);
+        return vec3(0.65, 0.1, 0.2) * diff;
     } else {
-        return vec3(0, 0, 0);
+        return vec3(0);
     }
 }
 
-vec3 ray_dir(float fov, vec2 size, vec2 fragCoord) {
-    vec2 xy = fragCoord - size / 2.0;
-    float z = size.y / tan(radians(fov) / 2.0);
-    return normalize(vec3(xy, -z));
+mat3 cam_to_world(vec3 r_orig, vec3 target, float cr) {
+    vec3 w = normalize(target - r_orig);
+    vec3 p = vec3(sin(cr), cos(cr), 0.0);
+    vec3 u = normalize(cross(camera_up, w));
+    vec3 v = cross(u, w);
+
+    return mat3(u, v, w);
 }
 
 void main() {
     vec2 screen = vec2(screen_width, screen_height);
 
     float gamma = 2.2;
+    const float focal_length = 2.5;
 
-    vec3 pos = vec3(-1.0, 0.0, 5.0);
-    vec3 r_dir = ray_dir(45.0, screen, gl_FragCoord.xy);
+    vec2 uv = (gl_FragCoord.xy * 2.0 - screen) / screen.y;
+
+    vec3 pos = camera_pos;
+    vec3 target = camera_dir;
+    mat3 ca = cam_to_world(pos, target, 0.0);
+    vec3 r_dir = ca * normalize(vec3(uv, focal_length));
+
     vec3 rgb = ray_march(pos, r_dir);
+
+    float shadows = soft_shadow(light_source, normalize(light_source - pos), 0.1, 10.0, 10.0);
     rgb = pow(rgb, vec3(1.0 / gamma));
+
     ScreenColor = vec4(rgb, 1.0f);
 }
