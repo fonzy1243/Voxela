@@ -17,7 +17,7 @@ void process_input(GLFWwindow *window);
 int screen_height = 900;
 int screen_width = 1600;
 
-Camera camera(glm::vec3(0.0, 0.0, -2.5));
+Camera camera(glm::vec3(0.0, 0.0, -2.0));
 float last_X = screen_width / 2.0f;
 float last_Y = screen_height / 2.0f;
 bool first_mouse = true;
@@ -26,16 +26,30 @@ float delta_time = 0.0f;
 float last_frame = 0.0f;
 
 int main() {
-  float screen_quad[] = {
-      1.0f,  1.0f,  0.0f, // top right
-      1.0f,  -1.0f, 0.0f, // bottom right
-      -1.0f, -1.0f, 0.0f, // bottom left
-      -1.0f, 1.0f,  0.0f, // top left
+  float cube_vertices[] = {
+      -0.5, 0.5,  0.5,  // F top left
+      0.5,  0.5,  0.5,  // F top right
+      0.5,  -0.5, 0.5,  // F bottom right
+      -0.5, -0.5, 0.5,  // F bottom left
+      -0.5, 0.5,  -0.5, // B top left
+      0.5,  0.5,  -0.5, // B top right
+      0.5,  -0.5, -0.5, // B bottom right
+      -0.5, -0.5, -0.5  // B bottom left
   };
 
-  unsigned int screen_indices[] = {
-      0, 1, 3, // top right triangle
-      1, 2, 3  // bottom left triangle
+  int cube_indices[] = {
+      0, 3, 2, // Front
+      2, 1, 0, // Front
+      1, 5, 6, // Right
+      6, 2, 1, // Right
+      5, 4, 7, // Left
+      7, 6, 5, // Left
+      4, 7, 3, // Back
+      3, 0, 4, // Back
+      4, 5, 1, // Top
+      1, 0, 4, // Top
+      3, 2, 6, // Bottom
+      6, 7, 3, // Bottom
   };
 
   glfwInit();
@@ -62,24 +76,24 @@ int main() {
     return -1;
   }
 
-  Shader screen_shader("../src/shaders/screen_shader.vs.glsl",
-                       "../src/shaders/screen_shader.fs.glsl");
+  Shader cube_shader("../src/shaders/screen_shader.vs.glsl",
+                     "../src/shaders/screen_shader.fs.glsl");
 
-  unsigned int screen_vao, screen_vbo, screen_ebo;
+  unsigned int cube_vao, cube_vbo, cube_ebo;
 
-  glGenVertexArrays(1, &screen_vao);
+  glGenVertexArrays(1, &cube_vao);
 
-  glGenBuffers(1, &screen_vbo);
-  glGenBuffers(1, &screen_ebo);
+  glGenBuffers(1, &cube_vbo);
+  glGenBuffers(1, &cube_ebo);
 
-  glBindVertexArray(screen_vao);
+  glBindVertexArray(cube_vao);
 
-  glBindBuffer(GL_ARRAY_BUFFER, screen_vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(screen_quad), screen_quad,
+  glBindBuffer(GL_ARRAY_BUFFER, cube_vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices,
                GL_STATIC_DRAW);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, screen_ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(screen_indices), screen_indices,
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube_ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices,
                GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
@@ -88,9 +102,10 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  std::cout << "FRONT: " << camera.GetDirection().x << ", "
-            << camera.GetDirection().y << ", " << camera.GetDirection().z
-            << std::endl;
+  glEnable(GL_DEPTH_TEST);
+
+  // TODO: Change back to fill
+  /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
 
   while (!glfwWindowShouldClose(window)) {
     // frame time logic
@@ -103,24 +118,26 @@ int main() {
 
     // render
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    screen_shader.use();
-    glfwGetWindowSize(window, &screen_width, &screen_height);
-    screen_shader.set_int("screen_width", screen_width);
-    screen_shader.set_int("screen_height", screen_height);
+    cube_shader.use();
 
-    screen_shader.use();
-    screen_shader.set_vec3("camera_pos", camera.Position);
+    // pass projection matrix
+    glm::mat4 projection = glm::perspective(
+        glm::radians(camera.Zoom), (float)screen_width / (float)screen_height,
+        0.1f, 100.0f);
+    cube_shader.set_mat4("projection", projection);
 
-    screen_shader.use();
-    screen_shader.set_vec3("camera_dir", camera.GetDirection());
+    // pass view transform matrix
+    glm::mat4 view = camera.GetViewMatrix();
+    cube_shader.set_mat4("view", view);
 
-    screen_shader.use();
-    screen_shader.set_vec3("camera_up", camera.GetUp());
+    // identity matrix
+    glm::mat4 model = glm::mat4(1.0f);
+    cube_shader.set_mat4("model", model);
 
-    glBindVertexArray(screen_vao);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(cube_vao);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     // swap buffers and call events
     glfwSwapBuffers(window);
@@ -129,9 +146,6 @@ int main() {
 
   glfwTerminate();
 
-  std::cout << "FRONT: " << camera.GetDirection().x << ", "
-            << camera.GetDirection().y << ", " << camera.GetDirection().z
-            << std::endl;
   return 0;
 }
 

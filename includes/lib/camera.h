@@ -77,9 +77,9 @@ public:
     if (direction == BACKWARD)
       Position -= Front * velocity;
     if (direction == LEFT)
-      Position += Right * velocity;
-    if (direction == RIGHT)
       Position -= Right * velocity;
+    if (direction == RIGHT)
+      Position += Right * velocity;
   }
 
   // processes input received from a mouse input system. Expects the offset
@@ -89,8 +89,8 @@ public:
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
-    Yaw -= xoffset;
-    Pitch -= yoffset;
+    Yaw += xoffset;
+    Pitch += yoffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (constrainPitch) {
