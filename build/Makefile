@@ -261,6 +261,78 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/world/block.obj: src/world/block.cpp.obj
+.PHONY : src/world/block.obj
+
+# target to build an object file
+src/world/block.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/block.cpp.obj
+.PHONY : src/world/block.cpp.obj
+
+src/world/block.i: src/world/block.cpp.i
+.PHONY : src/world/block.i
+
+# target to preprocess a source file
+src/world/block.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/block.cpp.i
+.PHONY : src/world/block.cpp.i
+
+src/world/block.s: src/world/block.cpp.s
+.PHONY : src/world/block.s
+
+# target to generate assembly for a file
+src/world/block.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/block.cpp.s
+.PHONY : src/world/block.cpp.s
+
+src/world/chunk.obj: src/world/chunk.cpp.obj
+.PHONY : src/world/chunk.obj
+
+# target to build an object file
+src/world/chunk.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk.cpp.obj
+.PHONY : src/world/chunk.cpp.obj
+
+src/world/chunk.i: src/world/chunk.cpp.i
+.PHONY : src/world/chunk.i
+
+# target to preprocess a source file
+src/world/chunk.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk.cpp.i
+.PHONY : src/world/chunk.cpp.i
+
+src/world/chunk.s: src/world/chunk.cpp.s
+.PHONY : src/world/chunk.s
+
+# target to generate assembly for a file
+src/world/chunk.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk.cpp.s
+.PHONY : src/world/chunk.cpp.s
+
+src/world/chunk_manager.obj: src/world/chunk_manager.cpp.obj
+.PHONY : src/world/chunk_manager.obj
+
+# target to build an object file
+src/world/chunk_manager.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj
+.PHONY : src/world/chunk_manager.cpp.obj
+
+src/world/chunk_manager.i: src/world/chunk_manager.cpp.i
+.PHONY : src/world/chunk_manager.i
+
+# target to preprocess a source file
+src/world/chunk_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.i
+.PHONY : src/world/chunk_manager.cpp.i
+
+src/world/chunk_manager.s: src/world/chunk_manager.cpp.s
+.PHONY : src/world/chunk_manager.s
+
+# target to generate assembly for a file
+src/world/chunk_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s
+.PHONY : src/world/chunk_manager.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -283,6 +355,15 @@ help:
 	@echo "... src/main.obj"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/world/block.obj"
+	@echo "... src/world/block.i"
+	@echo "... src/world/block.s"
+	@echo "... src/world/chunk.obj"
+	@echo "... src/world/chunk.i"
+	@echo "... src/world/chunk.s"
+	@echo "... src/world/chunk_manager.obj"
+	@echo "... src/world/chunk_manager.i"
+	@echo "... src/world/chunk_manager.s"
 .PHONY : help
 
 

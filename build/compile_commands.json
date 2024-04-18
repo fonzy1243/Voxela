@@ -12,6 +12,24 @@
   "output": "CMakeFiles/voxela.dir/src/main.cpp.obj"
 },
 {
+  "directory": "C:/Users/Fonzy/Voxela/build",
+  "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp  -o CMakeFiles/voxela.dir/src/world/block.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/block.cpp",
+  "file": "C:/Users/Fonzy/Voxela/src/world/block.cpp",
+  "output": "CMakeFiles/voxela.dir/src/world/block.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fonzy/Voxela/build",
+  "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp  -o CMakeFiles/voxela.dir/src/world/chunk.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/chunk.cpp",
+  "file": "C:/Users/Fonzy/Voxela/src/world/chunk.cpp",
+  "output": "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fonzy/Voxela/build",
+  "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp  -o CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/chunk_manager.cpp",
+  "file": "C:/Users/Fonzy/Voxela/src/world/chunk_manager.cpp",
+  "output": "CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj"
+},
+{
   "directory": "C:/Users/Fonzy/Voxela/build/glfw-3.4/src",
   "command": "C:/msys64/mingw64/bin/cc.exe -DUNICODE -DWINVER=0x0501 -D_GLFW_WIN32 -D_UNICODE @CMakeFiles/glfw.dir/includes_C.rsp -std=c99 -Wall -o CMakeFiles/glfw.dir/context.c.obj -c C:/Users/Fonzy/Voxela/glfw-3.4/src/context.c",
   "file": "C:/Users/Fonzy/Voxela/glfw-3.4/src/context.c",
