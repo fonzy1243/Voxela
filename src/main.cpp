@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <shaders.h>
+#include <string>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -27,14 +28,14 @@ float last_frame = 0.0f;
 
 int main() {
   float cube_vertices[] = {
-      -0.5, 0.5,  0.5,  // F top left
-      0.5,  0.5,  0.5,  // F top right
-      0.5,  -0.5, 0.5,  // F bottom right
-      -0.5, -0.5, 0.5,  // F bottom left
-      -0.5, 0.5,  -0.5, // B top left
-      0.5,  0.5,  -0.5, // B top right
-      0.5,  -0.5, -0.5, // B bottom right
-      -0.5, -0.5, -0.5  // B bottom left
+      -1.0, 1.0,  1.0,  // F top left
+      1.0,  1.0,  1.0,  // F top right
+      1.0,  -1.0, 1.0,  // F bottom right
+      -1.0, -1.0, 1.0,  // F bottom left
+      -1.0, 1.0,  -1.0, // B top left
+      1.0,  1.0,  -1.0, // B top right
+      1.0,  -1.0, -1.0, // B bottom right
+      -1.0, -1.0, -1.0  // B bottom left
   };
 
   int cube_indices[] = {
@@ -79,7 +80,29 @@ int main() {
   Shader cube_shader("../src/shaders/screen_shader.vs.glsl",
                      "../src/shaders/screen_shader.fs.glsl");
 
-  unsigned int cube_vao, cube_vbo, cube_ebo;
+  unsigned int cube_vao, cube_vbo, cube_ebo, instance_vbo;
+
+  glGenBuffers(1, &instance_vbo);
+
+  glm::vec3 translations[32768];
+  int i = 0;
+  float offset = 0.1f;
+  for (int z = -32; z < 32; z += 2) {
+    for (int y = -32; y < 32; y += 2) {
+      for (int x = -32; x < 32; x += 2) {
+        glm::vec3 translation;
+        translation.x = (float)x / 10.0f + offset;
+        translation.y = (float)y / 10.0f + offset;
+        translation.z = (float)z / 10.0f + offset;
+        translations[i++] = translation;
+      }
+    }
+  }
+
+  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 32768, &translations[0],
+               GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   glGenVertexArrays(1, &cube_vao);
 
@@ -96,8 +119,14 @@ int main() {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices,
                GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glVertexAttribDivisor(1, 1);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
@@ -105,7 +134,7 @@ int main() {
   glEnable(GL_DEPTH_TEST);
 
   // TODO: Change back to fill
-  /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
   while (!glfwWindowShouldClose(window)) {
     // frame time logic
@@ -137,7 +166,7 @@ int main() {
     cube_shader.set_mat4("model", model);
 
     glBindVertexArray(cube_vao);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 32768);
 
     // swap buffers and call events
     glfwSwapBuffers(window);
