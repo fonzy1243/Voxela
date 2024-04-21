@@ -39,7 +39,7 @@ public:
       vertex_code = v_shader_stream.str();
       fragment_code = f_shader_stream.str();
     } catch (std::ifstream::failure e) {
-      std::cout << "ERROR::SHADDER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+      std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
 
     const char *v_shader_code = vertex_code.c_str();
@@ -87,7 +87,7 @@ public:
     glDeleteShader(fragment);
   }
 
-  void use() { glUseProgram(ID); }
+  void use() const { glUseProgram(ID); }
 
   void set_bool(const std::string &name, bool value) const {
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
