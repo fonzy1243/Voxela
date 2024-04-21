@@ -1,15 +1,18 @@
+#include "glm/fwd.hpp"
 #define GLFW_INCLUDE_NONE
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <GLFW/glfw3.h>
 #include <camera.h>
+#include <chunk.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <shaders.h>
-#include <string>
+
+Shader *cube_shader;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -77,59 +80,12 @@ int main() {
     return -1;
   }
 
-  Shader cube_shader("../src/shaders/screen_shader.vs.glsl",
-                     "../src/shaders/screen_shader.fs.glsl");
+  cube_shader = new Shader("../src/shaders/screen_shader.vs.glsl",
+                           "../src/shaders/screen_shader.fs.glsl");
 
-  unsigned int cube_vao, cube_vbo, cube_ebo, instance_vbo;
-
-  glGenBuffers(1, &instance_vbo);
-
-  glm::vec3 translations[32768];
-  int i = 0;
-  float offset = 0.1f;
-  for (int z = -32; z < 32; z += 2) {
-    for (int y = -32; y < 32; y += 2) {
-      for (int x = -32; x < 32; x += 2) {
-        glm::vec3 translation;
-        translation.x = (float)x / 10.0f + offset;
-        translation.y = (float)y / 10.0f + offset;
-        translation.z = (float)z / 10.0f + offset;
-        translations[i++] = translation;
-      }
-    }
-  }
-
-  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 32768, &translations[0],
-               GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  glGenVertexArrays(1, &cube_vao);
-
-  glGenBuffers(1, &cube_vbo);
-  glGenBuffers(1, &cube_ebo);
-
-  glBindVertexArray(cube_vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, cube_vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices,
-               GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube_ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices,
-               GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-  glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glVertexAttribDivisor(1, 1);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  Chunk orig_chunk(glm::vec3(0));
+  Chunk new_chunk(glm::vec3(1, -1, 0));
+  Chunk far_chunk(glm::vec3(2, 1, 0));
 
   glEnable(GL_DEPTH_TEST);
 
@@ -149,24 +105,9 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    cube_shader.use();
-
-    // pass projection matrix
-    glm::mat4 projection = glm::perspective(
-        glm::radians(camera.Zoom), (float)screen_width / (float)screen_height,
-        0.1f, 100.0f);
-    cube_shader.set_mat4("projection", projection);
-
-    // pass view transform matrix
-    glm::mat4 view = camera.GetViewMatrix();
-    cube_shader.set_mat4("view", view);
-
-    // identity matrix
-    glm::mat4 model = glm::mat4(1.0f);
-    cube_shader.set_mat4("model", model);
-
-    glBindVertexArray(cube_vao);
-    glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 32768);
+    orig_chunk.render(camera);
+    new_chunk.render(camera);
+    far_chunk.render(camera);
 
     // swap buffers and call events
     glfwSwapBuffers(window);
@@ -174,6 +115,7 @@ int main() {
   }
 
   glfwTerminate();
+  delete cube_shader;
 
   return 0;
 }
