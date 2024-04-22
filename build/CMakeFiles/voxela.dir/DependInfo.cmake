@@ -9,6 +9,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/Fonzy/Voxela/src/glad.c" "CMakeFiles/voxela.dir/src/glad.c.obj" "gcc" "CMakeFiles/voxela.dir/src/glad.c.obj.d"
+  "C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp" "CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj" "gcc" "CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj.d"
+  "C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp" "CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj" "gcc" "CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj.d"
   "C:/Users/Fonzy/Voxela/src/main.cpp" "CMakeFiles/voxela.dir/src/main.cpp.obj" "gcc" "CMakeFiles/voxela.dir/src/main.cpp.obj.d"
   "C:/Users/Fonzy/Voxela/src/world/block.cpp" "CMakeFiles/voxela.dir/src/world/block.cpp.obj" "gcc" "CMakeFiles/voxela.dir/src/world/block.cpp.obj.d"
   "C:/Users/Fonzy/Voxela/src/world/chunk.cpp" "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj" "gcc" "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj.d"

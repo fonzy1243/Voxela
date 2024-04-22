@@ -84,11 +84,41 @@ CMakeFiles/voxela.dir/src/glad.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/voxela.dir/src/glad.c.s"
 	C:/msys64/mingw64/bin/cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:/Users/Fonzy/Voxela/src/glad.c -o CMakeFiles/voxela.dir/src/glad.c.s
 
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj: CMakeFiles/voxela.dir/flags.make
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj: C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj -MF CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj.d -o CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj -c C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp
+
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.i"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp > CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.i
+
+CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.s"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp -o CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.s
+
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj: CMakeFiles/voxela.dir/flags.make
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj: C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj -MF CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj.d -o CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj -c C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp
+
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/voxela.dir/src/graphics/mesh.cpp.i"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp > CMakeFiles/voxela.dir/src/graphics/mesh.cpp.i
+
+CMakeFiles/voxela.dir/src/graphics/mesh.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/voxela.dir/src/graphics/mesh.cpp.s"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp -o CMakeFiles/voxela.dir/src/graphics/mesh.cpp.s
+
 CMakeFiles/voxela.dir/src/main.cpp.obj: CMakeFiles/voxela.dir/flags.make
 CMakeFiles/voxela.dir/src/main.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
 CMakeFiles/voxela.dir/src/main.cpp.obj: C:/Users/Fonzy/Voxela/src/main.cpp
 CMakeFiles/voxela.dir/src/main.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/voxela.dir/src/main.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/voxela.dir/src/main.cpp.obj"
 	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/main.cpp.obj -MF CMakeFiles/voxela.dir/src/main.cpp.obj.d -o CMakeFiles/voxela.dir/src/main.cpp.obj -c C:/Users/Fonzy/Voxela/src/main.cpp
 
 CMakeFiles/voxela.dir/src/main.cpp.i: cmake_force
@@ -103,7 +133,7 @@ CMakeFiles/voxela.dir/src/world/block.cpp.obj: CMakeFiles/voxela.dir/flags.make
 CMakeFiles/voxela.dir/src/world/block.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
 CMakeFiles/voxela.dir/src/world/block.cpp.obj: C:/Users/Fonzy/Voxela/src/world/block.cpp
 CMakeFiles/voxela.dir/src/world/block.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/voxela.dir/src/world/block.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/voxela.dir/src/world/block.cpp.obj"
 	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/world/block.cpp.obj -MF CMakeFiles/voxela.dir/src/world/block.cpp.obj.d -o CMakeFiles/voxela.dir/src/world/block.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/block.cpp
 
 CMakeFiles/voxela.dir/src/world/block.cpp.i: cmake_force
@@ -118,7 +148,7 @@ CMakeFiles/voxela.dir/src/world/chunk.cpp.obj: CMakeFiles/voxela.dir/flags.make
 CMakeFiles/voxela.dir/src/world/chunk.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
 CMakeFiles/voxela.dir/src/world/chunk.cpp.obj: C:/Users/Fonzy/Voxela/src/world/chunk.cpp
 CMakeFiles/voxela.dir/src/world/chunk.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/voxela.dir/src/world/chunk.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/voxela.dir/src/world/chunk.cpp.obj"
 	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/world/chunk.cpp.obj -MF CMakeFiles/voxela.dir/src/world/chunk.cpp.obj.d -o CMakeFiles/voxela.dir/src/world/chunk.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/chunk.cpp
 
 CMakeFiles/voxela.dir/src/world/chunk.cpp.i: cmake_force
@@ -133,7 +163,7 @@ CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj: CMakeFiles/voxela.dir/fla
 CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
 CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj: C:/Users/Fonzy/Voxela/src/world/chunk_manager.cpp
 CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj"
 	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj -MF CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj.d -o CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/chunk_manager.cpp
 
 CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.i: cmake_force
@@ -147,6 +177,8 @@ CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s: cmake_force
 # Object files for target voxela
 voxela_OBJECTS = \
 "CMakeFiles/voxela.dir/src/glad.c.obj" \
+"CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj" \
+"CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj" \
 "CMakeFiles/voxela.dir/src/main.cpp.obj" \
 "CMakeFiles/voxela.dir/src/world/block.cpp.obj" \
 "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj" \
@@ -156,6 +188,8 @@ voxela_OBJECTS = \
 voxela_EXTERNAL_OBJECTS =
 
 voxela.exe: CMakeFiles/voxela.dir/src/glad.c.obj
+voxela.exe: CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj
+voxela.exe: CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/main.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/world/block.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/world/chunk.cpp.obj
@@ -164,7 +198,7 @@ voxela.exe: CMakeFiles/voxela.dir/build.make
 voxela.exe: glfw-3.4/src/libglfw3.a
 voxela.exe: CMakeFiles/voxela.dir/linkLibs.rsp
 voxela.exe: CMakeFiles/voxela.dir/objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable voxela.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable voxela.exe"
 	C:/Python312/Lib/site-packages/cmake/data/bin/cmake.exe -E rm -f CMakeFiles/voxela.dir/objects.a
 	C:/msys64/mingw64/bin/ar.exe qc CMakeFiles/voxela.dir/objects.a @CMakeFiles/voxela.dir/objects1.rsp
 	C:/msys64/mingw64/bin/c++.exe -Wl,--whole-archive CMakeFiles/voxela.dir/objects.a -Wl,--no-whole-archive -o voxela.exe -Wl,--out-implib,libvoxela.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/voxela.dir/linkLibs.rsp

@@ -237,6 +237,54 @@ src/glad.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/glad.c.s
 .PHONY : src/glad.c.s
 
+src/graphics/gl_errors.obj: src/graphics/gl_errors.cpp.obj
+.PHONY : src/graphics/gl_errors.obj
+
+# target to build an object file
+src/graphics/gl_errors.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj
+.PHONY : src/graphics/gl_errors.cpp.obj
+
+src/graphics/gl_errors.i: src/graphics/gl_errors.cpp.i
+.PHONY : src/graphics/gl_errors.i
+
+# target to preprocess a source file
+src/graphics/gl_errors.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.i
+.PHONY : src/graphics/gl_errors.cpp.i
+
+src/graphics/gl_errors.s: src/graphics/gl_errors.cpp.s
+.PHONY : src/graphics/gl_errors.s
+
+# target to generate assembly for a file
+src/graphics/gl_errors.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.s
+.PHONY : src/graphics/gl_errors.cpp.s
+
+src/graphics/mesh.obj: src/graphics/mesh.cpp.obj
+.PHONY : src/graphics/mesh.obj
+
+# target to build an object file
+src/graphics/mesh.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj
+.PHONY : src/graphics/mesh.cpp.obj
+
+src/graphics/mesh.i: src/graphics/mesh.cpp.i
+.PHONY : src/graphics/mesh.i
+
+# target to preprocess a source file
+src/graphics/mesh.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/mesh.cpp.i
+.PHONY : src/graphics/mesh.cpp.i
+
+src/graphics/mesh.s: src/graphics/mesh.cpp.s
+.PHONY : src/graphics/mesh.s
+
+# target to generate assembly for a file
+src/graphics/mesh.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/graphics/mesh.cpp.s
+.PHONY : src/graphics/mesh.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -352,6 +400,12 @@ help:
 	@echo "... src/glad.obj"
 	@echo "... src/glad.i"
 	@echo "... src/glad.s"
+	@echo "... src/graphics/gl_errors.obj"
+	@echo "... src/graphics/gl_errors.i"
+	@echo "... src/graphics/gl_errors.s"
+	@echo "... src/graphics/mesh.obj"
+	@echo "... src/graphics/mesh.i"
+	@echo "... src/graphics/mesh.s"
 	@echo "... src/main.obj"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

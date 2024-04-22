@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/voxela.dir/src/glad.c.obj"
   "CMakeFiles/voxela.dir/src/glad.c.obj.d"
+  "CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj"
+  "CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj.d"
+  "CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj"
+  "CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj.d"
   "CMakeFiles/voxela.dir/src/main.cpp.obj"
   "CMakeFiles/voxela.dir/src/main.cpp.obj.d"
   "CMakeFiles/voxela.dir/src/world/block.cpp.obj"

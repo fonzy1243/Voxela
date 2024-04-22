@@ -7,6 +7,18 @@
 },
 {
   "directory": "C:/Users/Fonzy/Voxela/build",
+  "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj -c C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp",
+  "file": "C:/Users/Fonzy/Voxela/src/graphics/gl_errors.cpp",
+  "output": "CMakeFiles/voxela.dir/src/graphics/gl_errors.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fonzy/Voxela/build",
+  "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj -c C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp",
+  "file": "C:/Users/Fonzy/Voxela/src/graphics/mesh.cpp",
+  "output": "CMakeFiles/voxela.dir/src/graphics/mesh.cpp.obj"
+},
+{
+  "directory": "C:/Users/Fonzy/Voxela/build",
   "command": "C:/msys64/mingw64/bin/c++.exe  @CMakeFiles/voxela.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles/voxela.dir/src/main.cpp.obj -c C:/Users/Fonzy/Voxela/src/main.cpp",
   "file": "C:/Users/Fonzy/Voxela/src/main.cpp",
   "output": "CMakeFiles/voxela.dir/src/main.cpp.obj"
