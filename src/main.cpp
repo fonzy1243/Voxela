@@ -1,10 +1,10 @@
-#include "glm/fwd.hpp"
 #define GLFW_INCLUDE_NONE
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <GLFW/glfw3.h>
 #include <camera.h>
 #include <chunk.h>
+#include <gl_errors.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,7 +21,7 @@ void process_input(GLFWwindow *window);
 int screen_height = 900;
 int screen_width = 1600;
 
-Camera camera(glm::vec3(0.0, 0.0, -2.0));
+Camera camera(glm::vec3(0.0, 0.0, 0.0));
 float last_X = screen_width / 2.0f;
 float last_Y = screen_height / 2.0f;
 bool first_mouse = true;
@@ -30,32 +30,6 @@ float delta_time = 0.0f;
 float last_frame = 0.0f;
 
 int main() {
-  float cube_vertices[] = {
-      -1.0, 1.0,  1.0,  // F top left
-      1.0,  1.0,  1.0,  // F top right
-      1.0,  -1.0, 1.0,  // F bottom right
-      -1.0, -1.0, 1.0,  // F bottom left
-      -1.0, 1.0,  -1.0, // B top left
-      1.0,  1.0,  -1.0, // B top right
-      1.0,  -1.0, -1.0, // B bottom right
-      -1.0, -1.0, -1.0  // B bottom left
-  };
-
-  int cube_indices[] = {
-      0, 3, 2, // Front
-      2, 1, 0, // Front
-      1, 5, 6, // Right
-      6, 2, 1, // Right
-      5, 4, 7, // Left
-      7, 6, 5, // Left
-      4, 7, 3, // Back
-      3, 0, 4, // Back
-      4, 5, 1, // Top
-      1, 0, 4, // Top
-      3, 2, 6, // Bottom
-      6, 7, 3, // Bottom
-  };
-
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -83,9 +57,38 @@ int main() {
   cube_shader = new Shader("../src/shaders/screen_shader.vs.glsl",
                            "../src/shaders/screen_shader.fs.glsl");
 
-  Chunk orig_chunk(glm::vec3(0));
-  Chunk new_chunk(glm::vec3(1, -1, 0));
-  Chunk far_chunk(glm::vec3(2, 1, 0));
+  BlockArray blocks;
+  for (int x = 0; x < 32; x++) {
+    for (int y = 0; y < 32; y++) {
+      for (int z = 0; z < 32; z++) {
+        if (y == 0)
+          blocks[x][y][z].set_active(true);
+      }
+    }
+  }
+
+  BlockArray blocks2;
+  for (int x = 0; x < 32; x++) {
+    for (int y = 0; y < 32; y++) {
+      for (int z = 0; z < 32; z++) {
+        blocks2[x][y][z].set_active(true);
+      }
+    }
+  }
+
+  BlockArray blocks3;
+  for (int x = 0; x < 32; x++) {
+    for (int y = 0; y < 32; y++) {
+      for (int z = 0; z < 32; z++) {
+        if (x % 2 == 0)
+          blocks3[x][y][z].set_active(true);
+      }
+    }
+  }
+
+  Chunk orig_chunk(glm::vec3(0), blocks);
+  Chunk new_chunk(glm::vec3(1, 0, 0), blocks2);
+  Chunk far_chunk(glm::vec3(2, 1, 0), blocks3);
 
   glEnable(GL_DEPTH_TEST);
 
@@ -105,9 +108,23 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    orig_chunk.render(camera);
-    new_chunk.render(camera);
-    far_chunk.render(camera);
+    cube_shader->use();
+
+    // pass projection matrix
+    glm::mat4 projection = glm::perspective(
+        glm::radians(camera.Zoom), (float)screen_width / (float)screen_height,
+        0.1f, 500.0f);
+    cube_shader->set_mat4("projection", projection);
+    // pass view transform matrix
+    glm::mat4 view = camera.GetViewMatrix();
+    cube_shader->set_mat4("view", view);
+    // identity matrix
+    glm::mat4 model = glm::mat4(1.0f);
+    cube_shader->set_mat4("model", model);
+
+    orig_chunk.render();
+    new_chunk.render();
+    far_chunk.render();
 
     // swap buffers and call events
     glfwSwapBuffers(window);
