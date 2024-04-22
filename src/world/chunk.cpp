@@ -2,86 +2,182 @@
 #include <chunk.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <utility>
+#include <vector>
 
 extern Shader *cube_shader;
 
 extern int screen_height;
 extern int screen_width;
 
-constexpr int chunk_size = 8;
-constexpr int half_chunk_size = chunk_size / 2;
-constexpr int buff_size = chunk_size * chunk_size * chunk_size;
+extern const int chunk_size;
+extern const int half_chunk_size;
+extern const int buff_size;
+constexpr float block_size = 0.5;
 
-Chunk::Chunk(glm::vec3 coordinates) {
+Chunk::Chunk(glm::ivec3 coordinates, BlockArray &blocks) {
+  m_blocks = std::move(blocks);
+
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
   glGenBuffers(1, &instance_vbo);
 
-  int i = 0;
+  glm::ivec3 start(coordinates * chunk_size);
 
-  for (int z = 0; z < chunk_size - 1; z++) {
-    for (int y = 0; y < chunk_size - 1; y++) {
-      for (int x = 0; x < chunk_size - 1; x++) {
-        glm::vec3 translation;
-        translation.x =
-            (float)x - half_chunk_size + (chunk_size * coordinates.x);
-        translation.y =
-            (float)y - half_chunk_size + (chunk_size * coordinates.y);
-        translation.z =
-            (float)z - half_chunk_size + (chunk_size * coordinates.z);
-        translations[i++] = translation;
+  for (int x = 0; x < chunk_size; x++) {
+    for (int y = 0; y < chunk_size; y++) {
+      for (int z = 0; z < chunk_size; z++) {
+        if (m_blocks[x][y][z].is_active()) {
+          create_cube(vertices, indices, start.x + x, start.y + y, start.z + z);
+        }
       }
     }
   }
 
-  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * buff_size, &translations[0],
-               GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  glGenVertexArrays(1, &vao);
-
-  glGenBuffers(1, &vbo);
-  glGenBuffers(1, &ebo);
-
-  glBindVertexArray(vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices,
-               GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_indices), cube_indices,
-               GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-  glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glVertexAttribDivisor(1, 1);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  voxel_mesh = new Mesh(vertices, indices);
 }
 
-const void Chunk::render(Camera camera) {
-  cube_shader->use();
+const void Chunk::render() { voxel_mesh->draw(*cube_shader); }
 
-  // pass projection matrix
-  glm::mat4 projection = glm::perspective(
-      glm::radians(camera.Zoom), (float)screen_width / (float)screen_height,
-      0.1f, 100.0f);
-  cube_shader->set_mat4("projection", projection);
-  // pass view transform matrix
-  glm::mat4 view = camera.GetViewMatrix();
-  cube_shader->set_mat4("view", view);
-  // identity matrix
-  glm::mat4 model = glm::mat4(1.0f);
-  cube_shader->set_mat4("model", model);
-
-  glBindVertexArray(vao);
-  glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, buff_size);
+Vertex create_vertex(glm::vec3 position, glm::vec3 normal, glm::vec4 color) {
+  Vertex v;
+  v.position = position;
+  v.normal = normal;
+  v.color = color;
+  return v;
 }
 
-/* void Chunk::set_shader(const Shader &shader) { cube_shader = shader; } */
+void Chunk::create_cube(std::vector<Vertex> &vertices,
+                        std::vector<unsigned int> &indices, int x, int y,
+                        int z) {
+  glm::vec4 color(1.0f);
+
+  // Front vertices
+  glm::vec3 front_bleft(x - block_size, y - block_size, z + block_size);
+  glm::vec3 front_bright(x + block_size, y - block_size, z + block_size);
+  glm::vec3 front_tright(x + block_size, y + block_size, z + block_size);
+  glm::vec3 front_tleft(x - block_size, y + block_size, z + block_size);
+
+  // Back vertices
+  glm::vec3 back_bleft(x - block_size, y - block_size, z - block_size);
+  glm::vec3 back_bright(x + block_size, y - block_size, z - block_size);
+  glm::vec3 back_tright(x + block_size, y + block_size, z - block_size);
+  glm::vec3 back_tleft(x - block_size, y + block_size, z - block_size);
+
+  glm::vec3 normal;
+
+  // Front face
+  normal = glm::vec3(0.0f, 0.0f, 1.0f);
+  Vertex top_left, bottom_right, bottom_left, top_right;
+  // left triangle
+  glm::vec4 front_color(0, 0, 1.0f, 1.0f);
+  top_left = create_vertex(front_tleft, normal, front_color);
+  bottom_right = create_vertex(front_bright, normal, front_color);
+  bottom_left = create_vertex(front_bleft, normal, front_color);
+
+  // right triangle
+  top_right = create_vertex(front_tright, normal, front_color);
+
+  // offset the indices by the current amount of vertices
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 2 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_left, bottom_right, top_right});
+
+  // Back face
+  normal = glm::vec3(0.0f, 0.0f, -1.0f);
+  glm::vec4 back_color(1.0f, 0, 0, 1.0f);
+  // left triangle
+  top_left = create_vertex(back_tleft, normal, back_color);
+  bottom_right = create_vertex(back_bright, normal, back_color);
+  bottom_left = create_vertex(back_bleft, normal, back_color);
+
+  // right triangle
+  top_right = create_vertex(back_tright, normal, back_color);
+
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_right, bottom_left, top_right});
+  // Right face
+  normal = glm::vec3(1.0f, 0.0f, 0.0f);
+  glm::vec4 right_color(0, 1.0f, 0, 1.0f);
+  // left triangle
+  top_left = create_vertex(front_tright, normal, right_color);
+  bottom_right = create_vertex(back_bright, normal, right_color);
+  bottom_left = create_vertex(front_bright, normal, right_color);
+
+  // right triangle
+  top_right = create_vertex(back_tright, normal, right_color);
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 2 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_left, bottom_right, top_right});
+
+  // Left face
+  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
+  glm::vec4 left_color(0, 0.5f, 0.5f, 1.0f);
+  // left triangle
+  top_left = create_vertex(back_tleft, normal, left_color);
+  bottom_right = create_vertex(front_bleft, normal, left_color);
+  bottom_left = create_vertex(back_bleft, normal, left_color);
+
+  // right triangle
+  top_right = create_vertex(front_tleft, normal, left_color);
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 2 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_left, bottom_right, top_right});
+
+  // Top face
+  normal = glm::vec3(0.0f, 1.0f, 0.0f);
+  glm::vec4 top_color(0.5f, 0.5f, 0.0f, 1.0f);
+  // left triangle
+  top_left = create_vertex(back_tleft, normal, top_color);
+  bottom_right = create_vertex(front_tright, normal, top_color);
+  bottom_left = create_vertex(front_tleft, normal, top_color);
+
+  // right triangle
+  top_right = create_vertex(back_tright, normal, top_color);
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 2 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_left, bottom_right, top_right});
+
+  // Bottom face
+  normal = glm::vec3(0.0f, -1.0f, 0.0f);
+  glm::vec4 bottom_color(0.5f, 0.0f, 0.5f, 1.0f);
+  // left triangle
+  top_left = create_vertex(front_bleft, normal, bottom_color);
+  bottom_right = create_vertex(back_bright, normal, bottom_color);
+  bottom_left = create_vertex(back_bleft, normal, bottom_color);
+
+  // right triangle
+  top_right = create_vertex(back_bright, normal, bottom_color);
+  indices.insert(
+      indices.end(),
+      {0 + (unsigned int)vertices.size(), 1 + (unsigned int)vertices.size(),
+       2 + (unsigned int)vertices.size(), 0 + (unsigned int)vertices.size(),
+       3 + (unsigned int)vertices.size(), 2 + (unsigned int)vertices.size()});
+  vertices.insert(vertices.end(),
+                  {top_left, bottom_left, bottom_right, top_right});
+}
+
+void Chunk::set_cube(int x, int y, int z, bool active) {
+  m_blocks[x][y][z].set_active(active);
+}
