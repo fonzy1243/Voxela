@@ -19,15 +19,24 @@ typedef std::array<std::array<std::array<Block, chunk_size>, chunk_size>,
 
 class Chunk {
 public:
+  Chunk(glm::ivec3 coordinates);
   Chunk(glm::ivec3 coordinates, BlockArray &blocks);
+  ~Chunk();
+  void update(float dt);
   const void render();
   void set_cube(int x, int y, int z, bool active);
+  bool is_loaded();
+  bool is_setup();
+  void load();
+  void unload();
+  void setup();
 
 private:
-  unsigned int vao, vbo, ebo, instance_vbo;
-  Mesh *voxel_mesh = nullptr;
-  unsigned int active_blocks = 0;
-  glm::vec3 translations[32768];
+  unsigned int m_rendered_blocks = 0;
+  bool m_is_loaded = false;
+  bool m_is_setup = false;
+  Mesh *m_voxel_mesh = nullptr;
+  glm::ivec3 m_position;
   BlockArray m_blocks;
 
   void create_cube(std::vector<Vertex> &vertices,
