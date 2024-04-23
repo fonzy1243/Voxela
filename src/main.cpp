@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <camera.h>
 #include <chunk.h>
+#include <compute_shader.h>
 #include <gl_errors.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -13,6 +14,7 @@
 #include <shaders.h>
 
 Shader *cube_shader;
+BlockArray blocks;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -57,40 +59,27 @@ int main() {
   cube_shader = new Shader("../src/shaders/screen_shader.vs.glsl",
                            "../src/shaders/screen_shader.fs.glsl");
 
-  BlockArray blocks;
   for (int x = 0; x < 32; x++) {
     for (int y = 0; y < 32; y++) {
       for (int z = 0; z < 32; z++) {
-        if (y == 0)
-          blocks[x][y][z].set_active(true);
+        blocks[x][y][z].set_active(true);
       }
     }
   }
 
-  BlockArray blocks2;
-  for (int x = 0; x < 32; x++) {
-    for (int y = 0; y < 32; y++) {
-      for (int z = 0; z < 32; z++) {
-        blocks2[x][y][z].set_active(true);
-      }
+  std::vector<Chunk *> chunks;
+
+  std::cout << "deleted?" << std::endl;
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), blocks);
+      chunks.push_back(chunk);
     }
   }
-
-  BlockArray blocks3;
-  for (int x = 0; x < 32; x++) {
-    for (int y = 0; y < 32; y++) {
-      for (int z = 0; z < 32; z++) {
-        if (x % 2 == 0)
-          blocks3[x][y][z].set_active(true);
-      }
-    }
-  }
-
-  Chunk orig_chunk(glm::vec3(0), blocks);
-  Chunk new_chunk(glm::vec3(1, 0, 0), blocks2);
-  Chunk far_chunk(glm::vec3(2, 1, 0), blocks3);
+  std::cout << "deleted" << std::endl;
 
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
 
   // TODO: Change back to fill
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -100,6 +89,9 @@ int main() {
     float current_frame = static_cast<float>(glfwGetTime());
     delta_time = current_frame - last_frame;
     last_frame = current_frame;
+
+    float fps = 1.0f / delta_time;
+    std::cout << fps << std::endl;
 
     // input
     process_input(window);
@@ -122,9 +114,9 @@ int main() {
     glm::mat4 model = glm::mat4(1.0f);
     cube_shader->set_mat4("model", model);
 
-    orig_chunk.render();
-    new_chunk.render();
-    far_chunk.render();
+    for (int i = 0; i < chunks.size(); i++) {
+      chunks[i]->render();
+    }
 
     // swap buffers and call events
     glfwSwapBuffers(window);
@@ -133,6 +125,9 @@ int main() {
 
   glfwTerminate();
   delete cube_shader;
+  for (Chunk *chunk : chunks) {
+    delete chunk;
+  }
 
   return 0;
 }
