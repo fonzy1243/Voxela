@@ -996,6 +996,7 @@ CMakeFiles/voxela.dir/src/main.cpp.obj: C:/Users/Fonzy/Voxela/src/main.cpp \
   C:/Users/Fonzy/Voxela/includes/lib/block.h \
   C:/Users/Fonzy/Voxela/includes/lib/camera.h \
   C:/Users/Fonzy/Voxela/includes/lib/chunk.h \
+  C:/Users/Fonzy/Voxela/includes/lib/compute_shader.h \
   C:/Users/Fonzy/Voxela/includes/lib/gl_errors.h \
   C:/Users/Fonzy/Voxela/includes/lib/mesh.h \
   C:/Users/Fonzy/Voxela/includes/lib/shaders.h \
@@ -3207,6 +3208,8 @@ C:/Users/Fonzy/Voxela/glfw-3.4/include/GLFW/glfw3.h:
 C:/Users/Fonzy/Voxela/includes/lib/block.h:
 
 C:/Users/Fonzy/Voxela/includes/lib/camera.h:
+
+C:/Users/Fonzy/Voxela/includes/lib/compute_shader.h:
 
 C:/msys64/mingw64/include/c++/13.2.0/array:
 
