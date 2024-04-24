@@ -33,6 +33,7 @@ public:
 
 private:
   unsigned int m_rendered_blocks = 0;
+  unsigned int faces = 0;
   bool m_is_loaded = false;
   bool m_is_setup = false;
   Mesh *m_voxel_mesh = nullptr;
@@ -40,7 +41,8 @@ private:
   BlockArray m_blocks;
 
   void create_cube(std::vector<Vertex> &vertices,
-                   std::vector<unsigned int> &indices, int x, int y, int z);
+                   std::vector<unsigned int> &indices,
+                   std::array<bool, 6> occluded, int x, int y, int z);
 };
 
 #endif
