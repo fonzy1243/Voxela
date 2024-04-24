@@ -1,3 +1,4 @@
+#include <array>
 #include <camera.h>
 #include <chunk.h>
 #include <glad/glad.h>
@@ -69,7 +70,11 @@ Chunk::Chunk(glm::ivec3 coordinates, BlockArray &blocks) {
             z_postive) {
           continue;
         }
-        create_cube(vertices, indices, start.x + x, start.y + y, start.z + z);
+
+        std::array<bool, 6> occluded = {z_postive,  x_postive, z_negative,
+                                        x_negative, y_postive, y_negative};
+        create_cube(vertices, indices, occluded, start.x + x, start.y + y,
+                    start.z + z);
       }
     }
   }
@@ -129,7 +134,10 @@ void Chunk::update(float dt) {
             z_postive) {
           continue;
         }
-        create_cube(vertices, indices, x, y, z);
+
+        std::array<bool, 6> occluded = {z_postive,  x_postive, z_negative,
+                                        x_negative, y_postive, y_negative};
+        create_cube(vertices, indices, occluded, x, y, z);
       }
     }
   }
@@ -150,12 +158,50 @@ void Chunk::setup() {
 
   glm::ivec3 start(m_position * chunk_size);
 
+  bool temp = false;
   for (int x = 0; x < chunk_size; x++) {
     for (int y = 0; y < chunk_size; y++) {
       for (int z = 0; z < chunk_size; z++) {
-        if (m_blocks[x][y][z].is_active()) {
-          create_cube(vertices, indices, start.x + x, start.y + y, start.z + z);
+        if (!m_blocks[x][y][z].is_active()) {
+          continue;
         }
+        bool x_negative = temp;
+        if (x > 0) {
+          x_negative = m_blocks[x - 1][y][z].is_active();
+        }
+        bool x_postive = temp;
+        if (x < chunk_size - 1) {
+          x_postive = m_blocks[x + 1][y][z].is_active();
+        }
+
+        bool y_negative = temp;
+        if (y > 0) {
+          y_negative = m_blocks[x][y - 1][z].is_active();
+        }
+        bool y_postive = temp;
+        if (y < chunk_size - 1) {
+          y_postive = m_blocks[x][y + 1][z].is_active();
+        }
+
+        bool z_negative = temp;
+        if (z > 0) {
+          z_negative = m_blocks[x][y][z - 1].is_active();
+        }
+
+        bool z_postive = temp;
+        if (z < chunk_size - 1) {
+          z_postive = m_blocks[x][y][z + 1].is_active();
+        }
+
+        if (x_negative && x_postive && y_negative && y_postive && z_negative &&
+            z_postive) {
+          continue;
+        }
+
+        std::array<bool, 6> occluded = {z_postive,  x_postive, z_negative,
+                                        x_negative, y_postive, y_negative};
+        create_cube(vertices, indices, occluded, start.x + x, start.y + y,
+                    start.z + z);
       }
     }
   }
@@ -173,121 +219,102 @@ Vertex create_vertex(glm::vec3 position, glm::vec3 normal, glm::vec4 color) {
 }
 
 void Chunk::create_cube(std::vector<Vertex> &vertices,
-                        std::vector<unsigned int> &indices, int x, int y,
-                        int z) {
+                        std::vector<unsigned int> &indices,
+                        std::array<bool, 6> occluded, int x, int y, int z) {
 
-  glm::vec4 color(1.0f);
+  std::vector<glm::vec3> cube_vertices = {
+      // Front
+      {x - block_size, y - block_size, z + block_size},
+      {x + block_size, y - block_size, z + block_size},
+      {x + block_size, y + block_size, z + block_size},
+      {x - block_size, y + block_size, z + block_size},
+      // Back
+      {x - block_size, y - block_size, z - block_size},
+      {x + block_size, y - block_size, z - block_size},
+      {x + block_size, y + block_size, z - block_size},
+      {x - block_size, y + block_size, z - block_size},
+  };
 
-  // Front vertices
-  glm::vec3 front_bleft(x - block_size, y - block_size, z + block_size);
-  glm::vec3 front_bright(x + block_size, y - block_size, z + block_size);
-  glm::vec3 front_tright(x + block_size, y + block_size, z + block_size);
-  glm::vec3 front_tleft(x - block_size, y + block_size, z + block_size);
+  std::vector<glm::vec3> normals = {
+      {0, 0, 1},  // Front
+      {1, 0, 0},  // Right
+      {0, 0, -1}, // Back
+      {-1, 0, 0}, // Left
+      {0, 1, 0},  // Top
+      {0, -1, 0}, // Bottom
+  };
 
-  // Back vertices
-  glm::vec3 back_bleft(x - block_size, y - block_size, z - block_size);
-  glm::vec3 back_bright(x + block_size, y - block_size, z - block_size);
-  glm::vec3 back_tright(x + block_size, y + block_size, z - block_size);
-  glm::vec3 back_tleft(x - block_size, y + block_size, z - block_size);
+  std::vector<glm::vec4> colors = {
+      {0, 0, 1, 1},     // Front
+      {0, 1, 0, 1},     // Right
+      {1, 0, 0, 1},     // Back
+      {0, 0.5, 0.5, 1}, // Left
+      {0.5, 0.5, 0, 1}, // Top
+      {0.5, 0, 0.5, 1}, // Bottom
+  };
 
-  glm::vec3 normal;
+  for (int i = 0; i < 6; i++) {
+    if (occluded[i]) {
+      continue;
+    }
 
-  unsigned int offset = 24 * m_rendered_blocks;
+    Vertex top_left, bottom_right, bottom_left, top_right;
 
-  // Front face
-  normal = glm::vec3(0.0f, 0.0f, 1.0f);
-  Vertex top_left, bottom_right, bottom_left, top_right;
-  // left triangle
-  glm::vec4 front_color(0, 0, 1.0f, 1.0f);
-  top_left = create_vertex(front_tleft, normal, front_color);      // 2
-  bottom_right = create_vertex(front_bright, normal, front_color); // 1
-  bottom_left = create_vertex(front_bleft, normal, front_color);   // 0
+    glm::vec3 normal = normals[i];
+    glm::vec4 color = colors[i];
 
-  // right triangle
-  top_right = create_vertex(front_tright, normal, front_color); // 3
+    switch (i) {
+    // Front
+    case 0:
+      bottom_left = create_vertex(cube_vertices[0], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[1], normal, color); // 1
+      top_left = create_vertex(cube_vertices[3], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[2], normal, color);    // 3
+      break;
+    // Right
+    case 1:
+      bottom_left = create_vertex(cube_vertices[1], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[5], normal, color); // 1
+      top_left = create_vertex(cube_vertices[2], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[6], normal, color);    // 3
+      break;
+    // Back
+    case 2:
+      bottom_left = create_vertex(cube_vertices[5], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[4], normal, color); // 1
+      top_left = create_vertex(cube_vertices[6], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[7], normal, color);    // 3
+      break;
+    // Left
+    case 3:
+      bottom_left = create_vertex(cube_vertices[4], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[0], normal, color); // 1
+      top_left = create_vertex(cube_vertices[7], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[3], normal, color);    // 3
+      break;
+    // Top
+    case 4:
+      bottom_left = create_vertex(cube_vertices[3], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[2], normal, color); // 1
+      top_left = create_vertex(cube_vertices[7], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[6], normal, color);    // 3
+      break;
+    // Bottom
+    case 5:
+      bottom_left = create_vertex(cube_vertices[4], normal, color);  // 0
+      bottom_right = create_vertex(cube_vertices[5], normal, color); // 1
+      top_left = create_vertex(cube_vertices[0], normal, color);     // 2
+      top_right = create_vertex(cube_vertices[1], normal, color);    // 3
+      break;
+    }
 
-  indices.insert(indices.end(), {offset + 0, offset + 1, offset + 3, offset + 0,
-                                 offset + 3, offset + 2});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
+    indices.insert(indices.end(), {0 + faces, 1 + faces, 3 + faces, 0 + faces,
+                                   3 + faces, 2 + faces});
+    vertices.insert(vertices.end(),
+                    {bottom_left, bottom_right, top_left, top_right});
 
-  // Right face
-  normal = glm::vec3(1.0f, 0.0f, 0.0f);
-  glm::vec4 right_color(0, 1.0f, 0, 1.0f);
-  // left triangle
-  top_left = create_vertex(front_tright, normal, right_color);    // 6
-  bottom_right = create_vertex(back_bright, normal, right_color); // 5
-  bottom_left = create_vertex(front_bright, normal, right_color); // 4
-
-  // right triangle
-  top_right = create_vertex(back_tright, normal, right_color); // 7
-
-  indices.insert(indices.end(), {offset + 4, offset + 5, offset + 7, offset + 4,
-                                 offset + 5, offset + 6});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
-
-  // Back face
-  normal = glm::vec3(0.0f, 0.0f, -1.0f);
-  glm::vec4 back_color(1.0f, 0, 0, 1.0f);
-  // left triangle
-  top_left = create_vertex(back_tright, normal, back_color);    // 10
-  bottom_right = create_vertex(back_bleft, normal, back_color); // 9
-  bottom_left = create_vertex(back_bright, normal, back_color); // 8
-
-  // right triangle
-  top_right = create_vertex(back_tleft, normal, back_color); // 11
-
-  indices.insert(indices.end(), {offset + 8, offset + 9, offset + 11,
-                                 offset + 8, offset + 11, offset + 10});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
-
-  // Left face
-  normal = glm::vec3(-1.0f, 0.0f, 0.0f);
-  glm::vec4 left_color(0, 0.5f, 0.5f, 1.0f);
-  // left triangle
-  top_left = create_vertex(back_tleft, normal, left_color);      // 14
-  bottom_right = create_vertex(front_bleft, normal, left_color); // 13
-  bottom_left = create_vertex(back_bleft, normal, left_color);   // 12
-
-  // right triangle
-  top_right = create_vertex(front_tleft, normal, left_color); // 15
-
-  indices.insert(indices.end(), {offset + 12, offset + 13, offset + 15,
-                                 offset + 12, offset + 15, offset + 14});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
-
-  // Top face
-  normal = glm::vec3(0.0f, 1.0f, 0.0f);
-  glm::vec4 top_color(0.5f, 0.5f, 0.0f, 1.0f);
-  // left triangle
-  top_left = create_vertex(back_tleft, normal, top_color);       // 18
-  bottom_right = create_vertex(front_tright, normal, top_color); // 17
-  bottom_left = create_vertex(front_tleft, normal, top_color);   // 16
-
-  // right triangle
-  top_right = create_vertex(back_tright, normal, top_color); // 19
-  indices.insert(indices.end(), {offset + 16, offset + 17, offset + 19,
-                                 offset + 16, offset + 19, offset + 18});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
-
-  // Bottom face
-  normal = glm::vec3(0.0f, -1.0f, 0.0f);
-  glm::vec4 bottom_color(0.5f, 0.0f, 0.5f, 1.0f);
-  // left triangle
-  top_left = create_vertex(front_bleft, normal, bottom_color);     // 22
-  bottom_right = create_vertex(back_bright, normal, bottom_color); // 21
-  bottom_left = create_vertex(back_bleft, normal, bottom_color);   // 20
-
-  // right triangle
-  top_right = create_vertex(front_bright, normal, bottom_color); // 23
-  indices.insert(indices.end(), {offset + 20, offset + 21, offset + 23,
-                                 offset + 20, offset + 23, offset + 22});
-  vertices.insert(vertices.end(),
-                  {bottom_left, bottom_right, top_left, top_right});
+    faces += 4;
+  }
 
   m_rendered_blocks++;
 }
