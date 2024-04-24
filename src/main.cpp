@@ -69,14 +69,12 @@ int main() {
 
   std::vector<Chunk *> chunks;
 
-  std::cout << "deleted?" << std::endl;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), blocks);
       chunks.push_back(chunk);
     }
   }
-  std::cout << "deleted" << std::endl;
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
