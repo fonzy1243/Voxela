@@ -1,3 +1,5 @@
+#include <limits>
+#include <vector>
 #define GLFW_INCLUDE_NONE
 #define GLM_ENABLE_EXPERIMENTAL
 
@@ -11,17 +13,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <noise_map.h>
 #include <shaders.h>
 
 Shader *cube_shader;
+ComputeShader *noise_shader;
 BlockArray blocks;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void process_input(GLFWwindow *window);
 
-int screen_height = 900;
-int screen_width = 1600;
+int screen_height = 1080;
+int screen_width = 1080;
 
 Camera camera(glm::vec3(0.0, 0.0, 0.0));
 float last_X = screen_width / 2.0f;
@@ -59,6 +63,54 @@ int main() {
   cube_shader = new Shader("../src/shaders/screen_shader.vs.glsl",
                            "../src/shaders/screen_shader.fs.glsl");
 
+  noise_shader = new ComputeShader("../src/shaders/noise.cs.glsl");
+
+  Noise test_noise(123456 / 2 + 65969 * 3);
+
+  /* NOISE MAP TESTING */
+  Shader noise_shader_debug("../src/shaders/noise.vs.glsl",
+                            "../src/shaders/noise.fs.glsl");
+
+  unsigned int noise_texture;
+  glGenTextures(1, &noise_texture);
+  glBindTexture(GL_TEXTURE_2D, noise_texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, test_noise.get_dim(),
+               test_noise.get_dim(), 0, GL_RED, GL_FLOAT,
+               &test_noise.height[0]);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  float vertices[] = {
+      -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
+  };
+
+  unsigned int indices[] = {0, 1, 2, 2, 3, 0};
+
+  unsigned int VAO, VBO, EBO;
+
+  glGenVertexArrays(1, &VAO);
+  glGenBuffers(1, &VBO);
+  glGenBuffers(1, &EBO);
+
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,
+               GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+  /* NOISE MAP TESTING */
+
+  /*
   for (int x = 0; x < 32; x++) {
     for (int y = 0; y < 32; y++) {
       for (int z = 0; z < 32; z++) {
@@ -69,18 +121,20 @@ int main() {
 
   std::vector<Chunk *> chunks;
 
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
-      Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), blocks);
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), noise);
       chunks.push_back(chunk);
     }
   }
+
+  */
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
 
   // TODO: Change back to fill
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  /* glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); */
 
   while (!glfwWindowShouldClose(window)) {
     // frame time logic
@@ -89,7 +143,7 @@ int main() {
     last_frame = current_frame;
 
     float fps = 1.0f / delta_time;
-    std::cout << fps << std::endl;
+    /* std::cout << fps << std::endl; */
 
     // input
     process_input(window);
@@ -98,6 +152,14 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glBindTexture(GL_TEXTURE_2D, noise_texture);
+
+    noise_shader_debug.use();
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    /*
     cube_shader->use();
 
     // pass projection matrix
@@ -116,16 +178,18 @@ int main() {
       chunks[i]->render();
     }
 
+    */
+
     // swap buffers and call events
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
   glfwTerminate();
-  delete cube_shader;
-  for (Chunk *chunk : chunks) {
-    delete chunk;
-  }
+  /* delete cube_shader; */
+  /* for (Chunk *chunk : chunks) { */
+  /*   delete chunk; */
+  /* } */
 
   return 0;
 }
