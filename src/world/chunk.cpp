@@ -21,9 +21,24 @@ extern BlockArray blocks;
 
 Chunk::Chunk(glm::ivec3 coordinates) { m_position = coordinates; }
 
-Chunk::Chunk(glm::ivec3 coordinates, BlockArray &blocks) {
-  m_blocks = blocks;
+Chunk::Chunk(glm::ivec3 coordinates, std::vector<float> noise) {
   m_position = coordinates;
+
+  for (int x = 0; x < chunk_size; x++) {
+    for (int z = 0; z < chunk_size; z++) {
+      // Calculate the global x and z positions.
+      int globalX = m_position.x * chunk_size + x;
+      int globalZ = m_position.z * chunk_size + z;
+      // Calculate the index into the noise array.
+      int noiseIndex = globalX * 2048 + globalZ;
+      // Scale the noise value to the range of the chunk height.
+      int height = static_cast<int>(noise[noiseIndex] * chunk_size);
+      // Fill the blocks in the chunk up to the calculated height.
+      for (int y = 0; y < height; y++) {
+        m_blocks[x][y][z].set_active(true);
+      }
+    }
+  }
 
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
