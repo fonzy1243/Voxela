@@ -20,7 +20,7 @@ typedef std::array<std::array<std::array<Block, chunk_size>, chunk_size>,
 class Chunk {
 public:
   Chunk(glm::ivec3 coordinates);
-  Chunk(glm::ivec3 coordinates, BlockArray &blocks);
+  Chunk(glm::ivec3 coordinates, std::vector<float>);
   ~Chunk();
   void update(float dt);
   const void render();
