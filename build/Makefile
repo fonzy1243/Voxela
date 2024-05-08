@@ -381,6 +381,30 @@ src/world/chunk_manager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s
 .PHONY : src/world/chunk_manager.cpp.s
 
+src/world/noise_map.obj: src/world/noise_map.cpp.obj
+.PHONY : src/world/noise_map.obj
+
+# target to build an object file
+src/world/noise_map.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj
+.PHONY : src/world/noise_map.cpp.obj
+
+src/world/noise_map.i: src/world/noise_map.cpp.i
+.PHONY : src/world/noise_map.i
+
+# target to preprocess a source file
+src/world/noise_map.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/noise_map.cpp.i
+.PHONY : src/world/noise_map.cpp.i
+
+src/world/noise_map.s: src/world/noise_map.cpp.s
+.PHONY : src/world/noise_map.s
+
+# target to generate assembly for a file
+src/world/noise_map.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/voxela.dir/build.make CMakeFiles/voxela.dir/src/world/noise_map.cpp.s
+.PHONY : src/world/noise_map.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -418,6 +442,9 @@ help:
 	@echo "... src/world/chunk_manager.obj"
 	@echo "... src/world/chunk_manager.i"
 	@echo "... src/world/chunk_manager.s"
+	@echo "... src/world/noise_map.obj"
+	@echo "... src/world/noise_map.i"
+	@echo "... src/world/noise_map.s"
 .PHONY : help
 
 

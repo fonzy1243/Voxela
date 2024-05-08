@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj.d"
   "CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj"
   "CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj.d"
+  "CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj"
+  "CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj.d"
   "libvoxela.dll.a"
   "voxela.exe"
   "voxela.exe.manifest"

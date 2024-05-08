@@ -174,6 +174,21 @@ CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s"
 	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Fonzy/Voxela/src/world/chunk_manager.cpp -o CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.s
 
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj: CMakeFiles/voxela.dir/flags.make
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj: CMakeFiles/voxela.dir/includes_CXX.rsp
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj: C:/Users/Fonzy/Voxela/src/world/noise_map.cpp
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj: CMakeFiles/voxela.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj -MF CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj.d -o CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj -c C:/Users/Fonzy/Voxela/src/world/noise_map.cpp
+
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/voxela.dir/src/world/noise_map.cpp.i"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:/Users/Fonzy/Voxela/src/world/noise_map.cpp > CMakeFiles/voxela.dir/src/world/noise_map.cpp.i
+
+CMakeFiles/voxela.dir/src/world/noise_map.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/voxela.dir/src/world/noise_map.cpp.s"
+	C:/msys64/mingw64/bin/c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:/Users/Fonzy/Voxela/src/world/noise_map.cpp -o CMakeFiles/voxela.dir/src/world/noise_map.cpp.s
+
 # Object files for target voxela
 voxela_OBJECTS = \
 "CMakeFiles/voxela.dir/src/glad.c.obj" \
@@ -182,7 +197,8 @@ voxela_OBJECTS = \
 "CMakeFiles/voxela.dir/src/main.cpp.obj" \
 "CMakeFiles/voxela.dir/src/world/block.cpp.obj" \
 "CMakeFiles/voxela.dir/src/world/chunk.cpp.obj" \
-"CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj"
+"CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj" \
+"CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj"
 
 # External object files for target voxela
 voxela_EXTERNAL_OBJECTS =
@@ -194,11 +210,12 @@ voxela.exe: CMakeFiles/voxela.dir/src/main.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/world/block.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/world/chunk.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/src/world/chunk_manager.cpp.obj
+voxela.exe: CMakeFiles/voxela.dir/src/world/noise_map.cpp.obj
 voxela.exe: CMakeFiles/voxela.dir/build.make
 voxela.exe: glfw-3.4/src/libglfw3.a
 voxela.exe: CMakeFiles/voxela.dir/linkLibs.rsp
 voxela.exe: CMakeFiles/voxela.dir/objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable voxela.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:/Users/Fonzy/Voxela/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable voxela.exe"
 	C:/Python312/Lib/site-packages/cmake/data/bin/cmake.exe -E rm -f CMakeFiles/voxela.dir/objects.a
 	C:/msys64/mingw64/bin/ar.exe qc CMakeFiles/voxela.dir/objects.a @CMakeFiles/voxela.dir/objects1.rsp
 	C:/msys64/mingw64/bin/c++.exe -Wl,--whole-archive CMakeFiles/voxela.dir/objects.a -Wl,--no-whole-archive -o voxela.exe -Wl,--out-implib,libvoxela.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/voxela.dir/linkLibs.rsp
