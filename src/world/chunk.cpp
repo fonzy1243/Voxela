@@ -10,8 +10,6 @@ extern Shader *cube_shader;
 extern int screen_height;
 extern int screen_width;
 
-int max_offset = 0;
-
 extern const int chunk_size;
 extern const int half_chunk_size;
 extern const int buff_size;
@@ -30,9 +28,9 @@ Chunk::Chunk(glm::ivec3 coordinates, std::vector<float> noise) {
       int globalX = m_position.x * chunk_size + x;
       int globalZ = m_position.z * chunk_size + z;
       // Calculate the index into the noise array.
-      int noiseIndex = globalX * 2048 + globalZ;
+      int noiseIndex = globalX * 8000 + globalZ;
       // Scale the noise value to the range of the chunk height.
-      int height = static_cast<int>(noise[noiseIndex] * chunk_size);
+      float height = noise[noiseIndex] * chunk_size;
       // Fill the blocks in the chunk up to the calculated height.
       for (int y = 0; y < height; y++) {
         m_blocks[x][y][z].set_active(true);

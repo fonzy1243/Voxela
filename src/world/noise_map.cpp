@@ -41,7 +41,7 @@ Noise::Noise(int seed) : shader(*noise_shader) {
   glCheckError();
 
   shader.use();
-  glDispatchCompute(ceil(dim / 4), ceil(dim / 4), 1);
+  glDispatchCompute(dim / 8, dim / 8, 1);
   glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
   glCheckError();
 
