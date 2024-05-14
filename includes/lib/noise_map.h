@@ -4,8 +4,8 @@
 #include <compute_shader.h>
 #include <vector>
 
-const int NOISE_HEIGHT = 2048;
-const float NOISE_SCALE = 187.45;
+const int NOISE_HEIGHT = 8000;
+const float NOISE_SCALE = 327.45;
 
 class Noise {
 public:
