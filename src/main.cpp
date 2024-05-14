@@ -1,5 +1,3 @@
-#include <limits>
-#include <vector>
 #define GLFW_INCLUDE_NONE
 #define GLM_ENABLE_EXPERIMENTAL
 
@@ -65,7 +63,7 @@ int main() {
 
   noise_shader = new ComputeShader("../src/shaders/noise.cs.glsl");
 
-  Noise test_noise(123456 / 2 + 65969 * 3);
+  Noise test_noise(456 * 123 / 69 + 420);
 
   /* NOISE MAP TESTING */
   Shader noise_shader_debug("../src/shaders/noise.vs.glsl",
@@ -110,25 +108,14 @@ int main() {
   glBindVertexArray(0);
   /* NOISE MAP TESTING */
 
-  /*
-  for (int x = 0; x < 32; x++) {
-    for (int y = 0; y < 32; y++) {
-      for (int z = 0; z < 32; z++) {
-        blocks[x][y][z].set_active(true);
-      }
-    }
-  }
-
   std::vector<Chunk *> chunks;
 
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), noise);
+      Chunk *chunk = new Chunk(glm::ivec3(i, 0, j), test_noise.height);
       chunks.push_back(chunk);
     }
   }
-
-  */
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
@@ -154,12 +141,11 @@ int main() {
 
     glBindTexture(GL_TEXTURE_2D, noise_texture);
 
-    noise_shader_debug.use();
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    /* noise_shader_debug.use(); */
+    /* glBindVertexArray(VAO); */
+    /* glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); */
+    /* glBindVertexArray(0); */
 
-    /*
     cube_shader->use();
 
     // pass projection matrix
@@ -178,18 +164,16 @@ int main() {
       chunks[i]->render();
     }
 
-    */
-
     // swap buffers and call events
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
   glfwTerminate();
-  /* delete cube_shader; */
-  /* for (Chunk *chunk : chunks) { */
-  /*   delete chunk; */
-  /* } */
+  delete cube_shader;
+  for (Chunk *chunk : chunks) {
+    delete chunk;
+  }
 
   return 0;
 }
